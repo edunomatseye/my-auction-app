@@ -27,12 +27,12 @@ export const dbs = async (
   }
 };
 
-export const client3 = new Client({
+export const client = new Client({
   connectionString: "postgres://postgres:Admin123@localhost:5432/auctions",
 });
 
 // or
-export const client = new Client({
+export const client3 = new Client({
   host: "127.0.0.1",
   port: 5432,
   user: "postgres",

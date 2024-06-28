@@ -5,10 +5,7 @@ export default defineConfig({
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "postgres",
-    password: process.env.DB_PASSWORD || "Admin123",
-    database: process.env.DB_NAME || "auctions",
+    url: "postgres://postgres:Admin123@localhost:5432/auctions",
   },
   verbose: true,
   strict: true,
