@@ -1,40 +1,35 @@
 import {
-  integer,
-  pgEnum,
   pgTable,
-  serial,
   uniqueIndex,
+  pgEnum,
+  serial,
   varchar,
-  text,
+  integer,
   unique,
+  text,
   timestamp,
 } from "drizzle-orm/pg-core";
 
-// declaring enum in database
-export var popularityEnum = pgEnum("popularity", [
-  "unknown",
-  "known",
-  "popular",
-]);
+export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
 
-export var countries = pgTable(
+export const countries = pgTable(
   "countries",
   {
-    id: serial("id").primaryKey(),
+    id: serial("id").primaryKey().notNull(),
     name: varchar("name", { length: 256 }),
   },
-  (countries) => {
+  (table) => {
     return {
-      nameIndex: uniqueIndex("name_idx").on(countries.name),
+      name_idx: uniqueIndex("name_idx").using("btree", table.name),
     };
   }
 );
 
-export var cities = pgTable("cities", {
-  id: serial("id").primaryKey(),
+export const cities = pgTable("cities", {
+  id: serial("id").primaryKey().notNull(),
   name: varchar("name", { length: 256 }),
-  countryId: integer("country_id").references(() => countries.id),
-  popularity: popularityEnum("popularity"),
+  country_id: integer("country_id").references(() => countries.id),
+  popularity: popularity("popularity"),
 });
 
 export const composite = pgTable(
@@ -43,18 +38,22 @@ export const composite = pgTable(
     id: integer("id"),
     name: text("name"),
   },
-  (t) => ({
-    unq: unique().on(t.id, t.name),
-    unq2: unique("custom_name").on(t.id, t.name),
-  })
+  (table) => {
+    return {
+      composite_id_name_unique: unique("composite_id_name_unique").on(
+        table.id,
+        table.name
+      ),
+    };
+  }
 );
 
 export const users = pgTable("users", {
-  id: serial("id"),
+  id: serial("id").notNull(),
   name: text("name"),
   email: text("email"),
   password: text("password"),
-  role: text("role").$type<"admin" | "customer">(),
-  createdAt: timestamp("created_at"),
-  updatedAt: timestamp("updated_at"),
+  role: text("role"),
+  created_at: timestamp("created_at", { mode: "string" }),
+  updated_at: timestamp("updated_at", { mode: "string" }),
 });

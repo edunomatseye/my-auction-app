@@ -5,10 +5,13 @@ import { Autocomplete, AutocompleteItem, Avatar } from "@nextui-org/react";
 
 import { animals } from "./data";
 
+import { db } from "@/drizzle/db";
 import { title } from "@/components/primitives";
 
 export default function BlogPage() {
   const [value, setValue] = React.useState<React.Key>("cat");
+
+  const users = db.query.users.
 
   return (
     <div>
