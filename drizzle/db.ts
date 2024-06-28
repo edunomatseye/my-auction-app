@@ -2,6 +2,8 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 
+import * as schema from "@/drizzle/schema";
+
 export const dbs = async (
   sql: any,
   params: any,
@@ -45,4 +47,4 @@ export const client3 = new Client({
   // Your code with top-level await goes here
   await client.connect();
 })();
-export const db = drizzle(client);
+export const db = drizzle(client, { schema });

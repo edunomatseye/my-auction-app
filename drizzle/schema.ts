@@ -8,7 +8,9 @@ import {
   unique,
   text,
   timestamp,
+  jsonb,
 } from "drizzle-orm/pg-core";
+import { relations, sql } from "drizzle-orm";
 
 export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
 
@@ -49,11 +51,39 @@ export const composite = pgTable(
 );
 
 export const users = pgTable("users", {
-  id: serial("id").notNull(),
+  id: serial("id").primaryKey(),
   name: text("name"),
   email: text("email"),
   password: text("password"),
   role: text("role"),
-  created_at: timestamp("created_at", { mode: "string" }),
-  updated_at: timestamp("updated_at", { mode: "string" }),
+  chat_group_id: integer("chat_group_id").references(() => chatGroups.id),
+  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "string" }).default(sql`now()`),
 });
+
+export const chatGroups = pgTable("chat_groups", {
+  id: integer("id").primaryKey(),
+  name: text("name"),
+  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "string" }).default(sql`now()`),
+});
+
+export const usersToChatGroups = pgTable("users_to_chatgroups", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  group_id: integer("group_id")
+    .notNull()
+    .references(() => chatGroups.id),
+});
+
+export const profileInfo = pgTable("profile_info", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => users.id),
+  metadata: jsonb("metadata"),
+});
+
+export const usersRelations = relations(users, ({ one }) => ({
+  profile_info: one(profileInfo),
+}));
