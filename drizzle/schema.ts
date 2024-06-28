@@ -49,7 +49,7 @@ export const composite = pgTable(
   })
 );
 
-export const user = pgTable("user", {
+export const users = pgTable("users", {
   id: serial("id"),
   name: text("name"),
   email: text("email"),
