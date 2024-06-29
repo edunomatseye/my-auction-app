@@ -5,15 +5,15 @@ import { users } from "@/drizzle/schema";
 
 export default async function BlogPage() {
   const result = await db.query.users.findMany({
-    //with: { profile_info: true },
+    with: { profile_info: true },
   });
 
-  await db.insert(users).values({
-    name: "blog",
-    email: "blog@example.com",
-    password: "blog",
-    role: "admin",
-  });
+  // await db.insert(users).values({
+  //   name: "blog",
+  //   email: "blog@example.com",
+  //   password: "blog",
+  //   role: "admin",
+  // });
 
   return (
     <div>
@@ -21,7 +21,7 @@ export default async function BlogPage() {
 
       <ButtonUp />
 
-      <div>{JSON.stringify(result[0])}</div>
+      <div>{JSON.stringify(result[0], null, 4)}</div>
     </div>
   );
 }

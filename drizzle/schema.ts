@@ -62,8 +62,9 @@ export const users = pgTable("users", {
 });
 
 export const chatGroups = pgTable("chat_groups", {
-  id: integer("id").primaryKey(),
+  id: serial("id").primaryKey().notNull(),
   name: text("name"),
+  level: popularity("popularity"),
   created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
   updated_at: timestamp("updated_at", { mode: "string" }).default(sql`now()`),
 });
@@ -80,10 +81,15 @@ export const usersToChatGroups = pgTable("users_to_chatgroups", {
 
 export const profileInfo = pgTable("profile_info", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => users.id),
-  metadata: jsonb("metadata"),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  metadata: jsonb("metadata").default({ foo: "bar" }),
 });
 
 export const usersRelations = relations(users, ({ one }) => ({
-  profile_info: one(profileInfo),
+  profile_info: one(profileInfo, {
+    fields: [users.id],
+    references: [profileInfo.user_id],
+  }),
 }));
