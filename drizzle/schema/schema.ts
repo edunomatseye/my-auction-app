@@ -10,7 +10,9 @@ import {
   timestamp,
   jsonb,
 } from "drizzle-orm/pg-core";
-import { relations, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
+
+//import * as db_relations from "./relations";
 
 export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
 
@@ -86,10 +88,3 @@ export const profileInfo = pgTable("profile_info", {
     .references(() => users.id),
   metadata: jsonb("metadata").default({ foo: "bar" }),
 });
-
-export const usersRelations = relations(users, ({ one }) => ({
-  profile_info: one(profileInfo, {
-    fields: [users.id],
-    references: [profileInfo.user_id],
-  }),
-}));

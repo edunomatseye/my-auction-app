@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/db";
 import { title } from "@/components/primitives";
 import { ButtonUp } from "@/components/buttonUp";
-import { users } from "@/drizzle/schema";
+import { users } from "@/drizzle/schema/schema";
 
 export default async function BlogPage() {
   const result = await db.query.users.findMany({

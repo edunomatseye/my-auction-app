@@ -6,7 +6,7 @@ const projectDir = process.cwd();
 loadEnvConfig(projectDir);
 
 export default defineConfig({
-  schema: "./drizzle/schema.ts",
+  schema: "./drizzle/schema/*",
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
