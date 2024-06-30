@@ -6,7 +6,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
+		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
+		"migrate": "drizzle-kit generate && drizzle-kit migrate",
+		"drizzle:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
 		"@nextui-org/button": "2.0.34",
