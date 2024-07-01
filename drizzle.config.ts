@@ -7,7 +7,7 @@ loadEnvConfig(projectDir);
 
 export default defineConfig({
   schema: "./drizzle/schema/*",
-  out: "./drizzle",
+  out: "./drizzle/schema",
   dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL as string,

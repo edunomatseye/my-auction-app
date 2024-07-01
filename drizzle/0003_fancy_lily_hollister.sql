@@ -1,0 +1,1 @@
+ALTER TABLE "chat_groups" ALTER COLUMN "id" SET DATA TYPE serial;
