@@ -8,7 +8,7 @@ export default async function BlogPage() {
     where(users, { eq, gt }) {
       return gt(users.id, 51);
     },
-    with: { profile_infos: true },
+    with: { profile: true },
   });
 
   // await db.insert(users).values({

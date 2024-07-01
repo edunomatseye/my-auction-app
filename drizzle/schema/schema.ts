@@ -9,6 +9,9 @@ import {
   text,
   timestamp,
   jsonb,
+  date,
+  boolean,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
@@ -49,14 +52,14 @@ export const composite = pgTable(
   }
 );
 
-export const users_to_chatgroups = pgTable("users_to_chatgroups", {
+export const users_to_groups = pgTable("users_to_groups", {
   id: serial("id").primaryKey().notNull(),
   user_id: integer("user_id")
     .notNull()
     .references(() => users.id),
   group_id: integer("group_id")
     .notNull()
-    .references(() => chat_groups.id),
+    .references(() => groups.id),
 });
 
 export const users = pgTable("users", {
@@ -65,20 +68,20 @@ export const users = pgTable("users", {
   email: text("email"),
   password: text("password"),
   role: text("role"),
-  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
-  updated_at: timestamp("updated_at", { mode: "string" }).defaultNow(),
-  chat_group_id: integer("chat_group_id").references(() => chat_groups.id),
+  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).$onUpdateFn(
+    () => new Date()
+  ),
+  group_id: integer("group_id").references(() => groups.id),
 });
 
-export const profile_info = pgTable("profile_info", {
+export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey().notNull(),
-  user_id: integer("user_id")
-    .notNull()
-    .references(() => users.id),
+  user_id: integer("user_id").references(() => users.id),
   metadata: jsonb("metadata").default({ foo: "bar" }),
 });
 
-export const chat_groups = pgTable("chat_groups", {
+export const groups = pgTable("groups", {
   id: serial("id").primaryKey().notNull(),
   name: text("name"),
 });
@@ -90,4 +93,20 @@ export const posts = pgTable("posts", {
   author_id: integer("author_id")
     .notNull()
     .references(() => users.id),
+});
+
+export const todos = pgTable("todos", {
+  id: uuid("id").defaultRandom().primaryKey().notNull(),
+  title: text("title"),
+  description: text("description"),
+  due_date: date("due-date", { mode: "date" }).$defaultFn(() => new Date()),
+  completed: boolean("completed").default(false),
+  author_id: integer("author_id")
+    .default(2)
+    .notNull()
+    .references(() => users.id),
+  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).$onUpdateFn(
+    () => new Date()
+  ),
 });

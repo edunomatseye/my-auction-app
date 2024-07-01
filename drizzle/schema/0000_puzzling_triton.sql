@@ -4,11 +4,6 @@ EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "chat_groups" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"name" text
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "cities" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(256),
@@ -27,6 +22,11 @@ CREATE TABLE IF NOT EXISTS "countries" (
 	"name" varchar(256)
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "groups" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "posts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" text,
@@ -34,10 +34,21 @@ CREATE TABLE IF NOT EXISTS "posts" (
 	"author_id" integer NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "profile_info" (
+CREATE TABLE IF NOT EXISTS "profiles" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" integer NOT NULL,
+	"user_id" integer,
 	"metadata" jsonb DEFAULT '{"foo":"bar"}'::jsonb
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "todos" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"title" text,
+	"description" text,
+	"due-date" date,
+	"completed" boolean DEFAULT false,
+	"author_id" integer DEFAULT 2 NOT NULL,
+	"created_at" timestamp DEFAULT now(),
+	"updated_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
@@ -47,11 +58,11 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"password" text,
 	"role" text,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now(),
-	"chat_group_id" integer
+	"updated_at" timestamp,
+	"group_id" integer
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "users_to_chatgroups" (
+CREATE TABLE IF NOT EXISTS "users_to_groups" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
 	"group_id" integer NOT NULL
@@ -70,25 +81,31 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "profile_info" ADD CONSTRAINT "profile_info_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "profiles" ADD CONSTRAINT "profiles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "users" ADD CONSTRAINT "users_chat_group_id_chat_groups_id_fk" FOREIGN KEY ("chat_group_id") REFERENCES "public"."chat_groups"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "todos" ADD CONSTRAINT "todos_author_id_users_id_fk" FOREIGN KEY ("author_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "users_to_chatgroups" ADD CONSTRAINT "users_to_chatgroups_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "users" ADD CONSTRAINT "users_group_id_groups_id_fk" FOREIGN KEY ("group_id") REFERENCES "public"."groups"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "users_to_chatgroups" ADD CONSTRAINT "users_to_chatgroups_group_id_chat_groups_id_fk" FOREIGN KEY ("group_id") REFERENCES "public"."chat_groups"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "users_to_groups" ADD CONSTRAINT "users_to_groups_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "users_to_groups" ADD CONSTRAINT "users_to_groups_group_id_groups_id_fk" FOREIGN KEY ("group_id") REFERENCES "public"."groups"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

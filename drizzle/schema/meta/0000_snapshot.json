@@ -1,31 +1,9 @@
 {
-  "id": "06b8b587-a200-45e2-b585-0193f973f9ae",
+  "id": "3f18c85a-7b2a-45b8-8f6f-4cb0246a8a9e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.chat_groups": {
-      "name": "chat_groups",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "public.cities": {
       "name": "cities",
       "schema": "",
@@ -144,6 +122,28 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "public.groups": {
+      "name": "groups",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.posts": {
       "name": "posts",
       "schema": "",
@@ -192,8 +192,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.profile_info": {
-      "name": "profile_info",
+    "public.profiles": {
+      "name": "profiles",
       "schema": "",
       "columns": {
         "id": {
@@ -206,7 +206,7 @@
           "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "metadata": {
           "name": "metadata",
@@ -218,12 +218,88 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "profile_info_user_id_users_id_fk": {
-          "name": "profile_info_user_id_users_id_fk",
-          "tableFrom": "profile_info",
+        "profiles_user_id_users_id_fk": {
+          "name": "profiles_user_id_users_id_fk",
+          "tableFrom": "profiles",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.todos": {
+      "name": "todos",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "due-date": {
+          "name": "due-date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed": {
+          "name": "completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 2
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "todos_author_id_users_id_fk": {
+          "name": "todos_author_id_users_id_fk",
+          "tableFrom": "todos",
+          "tableTo": "users",
+          "columnsFrom": [
+            "author_id"
           ],
           "columnsTo": [
             "id"
@@ -280,11 +356,10 @@
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
-        "chat_group_id": {
-          "name": "chat_group_id",
+        "group_id": {
+          "name": "group_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -292,12 +367,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "users_chat_group_id_chat_groups_id_fk": {
-          "name": "users_chat_group_id_chat_groups_id_fk",
+        "users_group_id_groups_id_fk": {
+          "name": "users_group_id_groups_id_fk",
           "tableFrom": "users",
-          "tableTo": "chat_groups",
+          "tableTo": "groups",
           "columnsFrom": [
-            "chat_group_id"
+            "group_id"
           ],
           "columnsTo": [
             "id"
@@ -309,8 +384,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.users_to_chatgroups": {
-      "name": "users_to_chatgroups",
+    "public.users_to_groups": {
+      "name": "users_to_groups",
       "schema": "",
       "columns": {
         "id": {
@@ -334,9 +409,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "users_to_chatgroups_user_id_users_id_fk": {
-          "name": "users_to_chatgroups_user_id_users_id_fk",
-          "tableFrom": "users_to_chatgroups",
+        "users_to_groups_user_id_users_id_fk": {
+          "name": "users_to_groups_user_id_users_id_fk",
+          "tableFrom": "users_to_groups",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -347,10 +422,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "users_to_chatgroups_group_id_chat_groups_id_fk": {
-          "name": "users_to_chatgroups_group_id_chat_groups_id_fk",
-          "tableFrom": "users_to_chatgroups",
-          "tableTo": "chat_groups",
+        "users_to_groups_group_id_groups_id_fk": {
+          "name": "users_to_groups_group_id_groups_id_fk",
+          "tableFrom": "users_to_groups",
+          "tableTo": "groups",
           "columnsFrom": [
             "group_id"
           ],

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { todoAction } from "@/app/about/actions";
 
 export function Todo() {
   const [todos, setTodos] = useState([
@@ -36,6 +37,7 @@ export function Todo() {
     description: "",
     dueDate: "",
   });
+  //const [_, dispatchAction, isPending] = useActionState(todoAction, null);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -46,8 +48,8 @@ export function Todo() {
   };
   const handleAddTodo = () => {
     if (newTodo.title.trim() !== "") {
-      setTodos([
-        ...todos,
+      setTodos((prevTodos) => [
+        ...prevTodos,
         {
           id: todos.length + 1,
           title: newTodo.title,
@@ -118,11 +120,12 @@ export function Todo() {
       <div className="bg-background p-4">
         <h2 className="text-2xl font-bold mb-4">Add New Todo</h2>
         <form
+          action={todoAction}
           className="grid gap-4"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleAddTodo();
-          }}
+          // onSubmit={(e) => {
+          //   e.preventDefault();
+          //   handleAddTodo();
+          // }}
         >
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
@@ -133,6 +136,7 @@ export function Todo() {
               value={newTodo.title}
               onChange={handleInputChange}
             />
+            {/* {!!state && <div>Error showing title</div>} */}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="description">Description</Label>
