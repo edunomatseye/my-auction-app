@@ -1,11 +1,12 @@
 import { db } from "@/drizzle/db";
 import { title } from "@/components/primitives";
 import { ButtonUp } from "@/components/buttonUp";
+import { users } from "@/drizzle/schema/schema";
 
 export default async function BlogPage() {
-  const result = await db.query.users.findFirst({
-    where(users, { eq }) {
-      return eq(users.id, 51);
+  const result = await db.query.users.findMany({
+    where(users, { eq, gt }) {
+      return gt(users.id, 51);
     },
     with: { profile_infos: true },
   });

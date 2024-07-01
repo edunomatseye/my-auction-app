@@ -1,12 +1,12 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
-import clsx from "clsx";
 
 import { Providers } from "./providers";
 
+import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontBody, fontHeading, fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
@@ -36,9 +36,12 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <head />
       <body
-        className={clsx(
+        className={cn(
           "min-h-screen bg-background font-sans antialiased",
+          "antialiased",
           fontSans.variable,
+          fontHeading.variable,
+          fontBody.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
