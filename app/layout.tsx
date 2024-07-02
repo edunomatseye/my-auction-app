@@ -1,10 +1,10 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
+import clsx from "clsx";
 
 import { Providers } from "./providers";
 
-import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 import { fontBody, fontHeading, fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
@@ -36,7 +36,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <head />
       <body
-        className={cn(
+        className={clsx(
           "min-h-screen bg-background font-sans antialiased",
           "antialiased",
           fontSans.variable,
