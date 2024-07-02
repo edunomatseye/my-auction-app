@@ -9,13 +9,6 @@ export default function BlogPage() {
   const queryClient = useQueryClient();
   const result = queryClient.getQueryData(["todos"]);
 
-  // await db.insert(users).values({
-  //   name: "blog",
-  //   email: "blog@example.com",
-  //   password: "blog",
-  //   role: "admin",
-  // });
-
   return (
     <div>
       <h1 className={title()}>Blog</h1>

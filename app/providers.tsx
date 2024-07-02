@@ -1,7 +1,7 @@
 "use client";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import * as React from "react";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";

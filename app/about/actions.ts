@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
 import { db } from "@/drizzle/db";
-import { todos } from "@/drizzle/schema/schema";
+import { todos, users } from "@/drizzle/schema/schema";
 export const todoAction = async (formData: FormData) => {
   //const form = Object.fromEntries(formData);
 
@@ -34,3 +34,20 @@ export const getTodos = cache(async () => {
 
   return todos;
 });
+
+export const addUser = async () => {
+  type NewUser = typeof users.$inferInsert;
+  const insertUser = async (user: NewUser) => {
+    //return db.insert(users).values(user);
+
+    return db.insert(users).values({
+      name: "Alice Rice",
+      email: "alice@example.com",
+      password: "alice",
+      role: "admin",
+    });
+  };
+  const newUser: NewUser = { name: "Alef" };
+
+  await insertUser(newUser);
+};
