@@ -1,15 +1,13 @@
-import { db } from "@/drizzle/db";
+"use client";
+
+import { useQueryClient } from "@tanstack/react-query";
+
 import { title } from "@/components/primitives";
 import { ButtonUp } from "@/components/buttonUp";
-import { users } from "@/drizzle/schema/schema";
 
-export default async function BlogPage() {
-  const result = await db.query.users.findMany({
-    where(users, { eq, gt }) {
-      return gt(users.id, 0);
-    },
-    with: { profiles: true },
-  });
+export default function BlogPage() {
+  const queryClient = useQueryClient();
+  const result = queryClient.getQueryData(["todos"]);
 
   // await db.insert(users).values({
   //   name: "blog",
@@ -21,6 +19,7 @@ export default async function BlogPage() {
   return (
     <div>
       <h1 className={title()}>Blog</h1>
+      <h2>Using getQueryData from the Query cache using queryClient</h2>
 
       <ButtonUp />
 

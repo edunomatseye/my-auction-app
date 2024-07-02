@@ -19,7 +19,8 @@ export default function DocsPage() {
   return (
     <div>
       <h1 className={title()}>Docs</h1>
-      {JSON.stringify(data, null, 4)}
+      <h2>Using useQuery and populating the cache</h2>
+      <span>{JSON.stringify(data, null, 4)}</span>
     </div>
   );
 }
