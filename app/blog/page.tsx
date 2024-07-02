@@ -6,9 +6,9 @@ import { users } from "@/drizzle/schema/schema";
 export default async function BlogPage() {
   const result = await db.query.users.findMany({
     where(users, { eq, gt }) {
-      return gt(users.id, 51);
+      return gt(users.id, 0);
     },
-    with: { profile: true },
+    with: { profiles: true },
   });
 
   // await db.insert(users).values({

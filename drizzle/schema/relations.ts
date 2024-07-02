@@ -3,12 +3,12 @@ import { relations } from "drizzle-orm/relations";
 import {
   countries,
   cities,
-  users,
-  users_to_groups,
   groups,
-  profiles,
+  users,
   posts,
+  profiles,
   todos,
+  users_to_groups,
 } from "./schema";
 
 export const citiesRelations = relations(cities, ({ one }) => ({
@@ -20,6 +20,43 @@ export const citiesRelations = relations(cities, ({ one }) => ({
 
 export const countriesRelations = relations(countries, ({ many }) => ({
   cities: many(cities),
+}));
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  group: one(groups, {
+    fields: [users.group_id],
+    references: [groups.id],
+  }),
+  posts: many(posts),
+  profiles: many(profiles),
+  todos: many(todos),
+  users_to_groups: many(users_to_groups),
+}));
+
+export const groupsRelations = relations(groups, ({ many }) => ({
+  users: many(users),
+  users_to_groups: many(users_to_groups),
+}));
+
+export const postsRelations = relations(posts, ({ one }) => ({
+  user: one(users, {
+    fields: [posts.author_id],
+    references: [users.id],
+  }),
+}));
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+  user: one(users, {
+    fields: [profiles.user_id],
+    references: [users.id],
+  }),
+}));
+
+export const todosRelations = relations(todos, ({ one }) => ({
+  user: one(users, {
+    fields: [todos.author_id],
+    references: [users.id],
+  }),
 }));
 
 export const users_to_groupsRelations = relations(
@@ -35,36 +72,3 @@ export const users_to_groupsRelations = relations(
     }),
   })
 );
-
-export const usersRelations = relations(users, ({ one, many }) => ({
-  users_to_groups: many(users_to_groups),
-  group: one(groups, {
-    fields: [users.group_id],
-    references: [groups.id],
-  }),
-  profile: one(profiles, {
-    fields: [users.id],
-    references: [profiles.id],
-  }),
-  posts: many(posts),
-  todos: many(todos),
-}));
-
-export const groupsRelations = relations(groups, ({ many }) => ({
-  users_to_groups: many(users_to_groups),
-  users: many(users),
-}));
-
-export const postsRelations = relations(posts, ({ one }) => ({
-  user: one(users, {
-    fields: [posts.author_id],
-    references: [users.id],
-  }),
-}));
-
-export const todosRelations = relations(todos, ({ one }) => ({
-  author: one(users, {
-    fields: [todos.author_id],
-    references: [users.id],
-  }),
-}));

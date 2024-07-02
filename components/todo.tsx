@@ -1,43 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { todoAction } from "@/app/about/actions";
+import { todoAction, getTodos } from "@/app/about/actions";
 
 export function Todo() {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "Finish project proposal",
-      description: "Write up the details for the new project",
-      dueDate: "2023-06-15",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Schedule team meeting",
-      description: "Discuss project timeline and assign tasks",
-      dueDate: "2023-06-10",
-      completed: false,
-    },
-    {
-      id: 3,
-      title: "Research new design trends",
-      description: "Look into the latest UI/UX design patterns",
-      dueDate: "2023-06-20",
-      completed: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<any[]>([]);
   const [newTodo, setNewTodo] = useState({
     title: "",
     description: "",
     dueDate: "",
   });
-  //const [_, dispatchAction, isPending] = useActionState(todoAction, null);
+
+  useEffect(() => {
+    getTodos().then((todos) => {
+      const newTodos = todos.map((todo) => ({
+        id: todo.id,
+        title: todo.title,
+        description: todo.description,
+        dueDate: todo.due_date,
+        completed: todo.completed,
+      }));
+
+      setTodos(newTodos);
+    });
+  }, []);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -77,7 +69,7 @@ export function Todo() {
     <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] h-screen">
       <div className="bg-background border-r p-4 overflow-auto">
         <h2 className="text-2xl font-bold mb-4">Todo List</h2>
-        {todos.map((todo) => (
+        {todos?.map((todo) => (
           <div
             key={todo.id}
             className={`bg-card p-4 rounded-lg mb-4 border transition-colors ${

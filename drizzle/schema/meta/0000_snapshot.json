@@ -1,5 +1,5 @@
 {
-  "id": "3f18c85a-7b2a-45b8-8f6f-4cb0246a8a9e",
+  "id": "ae1e8faf-3aea-46d2-a056-67393666e3f0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -206,7 +206,7 @@
           "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "metadata": {
           "name": "metadata",
@@ -258,8 +258,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "due-date": {
-          "name": "due-date",
+        "due_date": {
+          "name": "due_date",
           "type": "date",
           "primaryKey": false,
           "notNull": false

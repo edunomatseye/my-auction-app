@@ -1,20 +1,38 @@
 import {
   pgTable,
-  uniqueIndex,
+  unique,
   pgEnum,
+  integer,
+  text,
+  uniqueIndex,
   serial,
   varchar,
-  integer,
-  unique,
-  text,
+  foreignKey,
   timestamp,
   jsonb,
+  uuid,
   date,
   boolean,
-  uuid,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
+
+export const composite = pgTable(
+  "composite",
+  {
+    id: integer("id"),
+    name: text("name"),
+  },
+  (table) => {
+    return {
+      composite_id_name_unique: unique("composite_id_name_unique").on(
+        table.id,
+        table.name
+      ),
+    };
+  }
+);
 
 export const countries = pgTable(
   "countries",
@@ -36,54 +54,15 @@ export const cities = pgTable("cities", {
   popularity: popularity("popularity"),
 });
 
-export const composite = pgTable(
-  "composite",
-  {
-    id: integer("id"),
-    name: text("name"),
-  },
-  (table) => {
-    return {
-      composite_id_name_unique: unique("composite_id_name_unique").on(
-        table.id,
-        table.name
-      ),
-    };
-  }
-);
-
-export const users_to_groups = pgTable("users_to_groups", {
-  id: serial("id").primaryKey().notNull(),
-  user_id: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  group_id: integer("group_id")
-    .notNull()
-    .references(() => groups.id),
-});
-
 export const users = pgTable("users", {
   id: serial("id").primaryKey().notNull(),
   name: text("name"),
   email: text("email"),
   password: text("password"),
   role: text("role"),
-  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
-  updated_at: timestamp("updated_at", { mode: "date" }).$onUpdateFn(
-    () => new Date()
-  ),
+  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "string" }),
   group_id: integer("group_id").references(() => groups.id),
-});
-
-export const profiles = pgTable("profiles", {
-  id: serial("id").primaryKey().notNull(),
-  user_id: integer("user_id").references(() => users.id),
-  metadata: jsonb("metadata").default({ foo: "bar" }),
-});
-
-export const groups = pgTable("groups", {
-  id: serial("id").primaryKey().notNull(),
-  name: text("name"),
 });
 
 export const posts = pgTable("posts", {
@@ -95,18 +74,39 @@ export const posts = pgTable("posts", {
     .references(() => users.id),
 });
 
+export const profiles = pgTable("profiles", {
+  id: serial("id").primaryKey().notNull(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  metadata: jsonb("metadata").default({ foo: "bar" }),
+});
+
 export const todos = pgTable("todos", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   title: text("title"),
   description: text("description"),
-  due_date: date("due-date", { mode: "date" }).$defaultFn(() => new Date()),
+  due_date: date("due_date"),
   completed: boolean("completed").default(false),
   author_id: integer("author_id")
     .default(2)
     .notNull()
     .references(() => users.id),
-  created_at: timestamp("created_at", { mode: "date" }).defaultNow(),
-  updated_at: timestamp("updated_at", { mode: "date" }).$onUpdateFn(
-    () => new Date()
-  ),
+  created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "string" }),
+});
+
+export const groups = pgTable("groups", {
+  id: serial("id").primaryKey().notNull(),
+  name: text("name"),
+});
+
+export const users_to_groups = pgTable("users_to_groups", {
+  id: serial("id").primaryKey().notNull(),
+  user_id: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  group_id: integer("group_id")
+    .notNull()
+    .references(() => groups.id),
 });
