@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Spinner } from "@nextui-org/spinner";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -9,26 +11,31 @@ import { Button } from "@/components/ui/button";
 import { todoAction, getTodos } from "@/app/about/actions";
 
 export function Todo() {
-  const [todos, setTodos] = useState<any[]>([]);
   const [newTodo, setNewTodo] = useState({
     title: "",
     description: "",
     dueDate: "",
   });
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    getTodos().then((todos) => {
-      const newTodos = todos.map((todo) => ({
+  const {
+    data: todos,
+    isError,
+    isLoading,
+    isSuccess,
+  } = useQuery({
+    queryKey: ["allTodos"],
+    queryFn: () => getTodos(),
+    select: (todos) => {
+      return todos.map((todo) => ({
         id: todo.id,
         title: todo.title,
         description: todo.description,
         dueDate: todo.due_date,
         completed: todo.completed,
       }));
-
-      setTodos(newTodos);
-    });
-  }, []);
+    },
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -38,32 +45,37 @@ export function Todo() {
       [e?.target?.name]: e?.target?.value,
     });
   };
-  const handleAddTodo = () => {
+
+  const handleAddTodo = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    await todoAction(formData);
+
     if (newTodo.title.trim() !== "") {
-      setTodos((prevTodos) => [
-        ...prevTodos,
-        {
-          id: todos.length + 1,
-          title: newTodo.title,
-          description: newTodo.description,
-          dueDate: newTodo.dueDate,
-          completed: false,
-        },
-      ]);
       setNewTodo({
         title: "",
         description: "",
         dueDate: "",
       });
     }
+
+    queryClient.invalidateQueries({ queryKey: ["allTodos"] });
   };
-  const handleToggleComplete = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
+
+  const handleToggleComplete = (id: string) => {
+    queryClient.setQueryData(["allTodos"], () => {
+      if (isSuccess) {
+        return todos?.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+        );
+      }
+    });
   };
+
+  if (isLoading) return <Spinner />;
+  if (isError) return <div>Sorry There was an Error</div>;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] h-screen">
@@ -112,12 +124,11 @@ export function Todo() {
       <div className="bg-background p-4">
         <h2 className="text-2xl font-bold mb-4">Add New Todo</h2>
         <form
-          action={todoAction}
           className="grid gap-4"
-          // onSubmit={(e) => {
-          //   e.preventDefault();
-          //   handleAddTodo();
-          // }}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleAddTodo(e);
+          }}
         >
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>

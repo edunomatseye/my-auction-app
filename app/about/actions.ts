@@ -32,7 +32,7 @@ export const todoAction = async (formData: FormData) => {
 export const getTodos = cache(async () => {
   const todos = await db.query.todos.findMany();
 
-  return todos;
+  return todos.reverse();
 });
 
 export const addUser = async () => {
