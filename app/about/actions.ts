@@ -1,8 +1,7 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { cache } from "react";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
 import { todos, users } from "@/drizzle/schema/schema";
@@ -26,12 +25,14 @@ export const todoAction = async (formData: FormData) => {
   };
 
   await insertTodo(newForm);
-
-  //revalidatePath("/about");
 };
 
 export const getTodos = cache(async () => {
-  return (await db.query.todos.findMany()).toReversed();
+  return (
+    await db.query.todos.findMany({
+      orderBy: asc(todos.created_at),
+    })
+  ).toReversed();
 });
 
 export const addUser = async () => {
