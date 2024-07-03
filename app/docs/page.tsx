@@ -10,7 +10,7 @@ import { title } from "@/components/primitives";
 export default function DocsPage() {
   const { data, isLoading, isError } = useQuery({
     queryFn: async () => await getTodos(),
-    queryKey: ["todos"], //Array according to Documentation
+    queryKey: ["allTodos"], //Array according to Documentation
   });
 
   if (isLoading) return <Spinner />;

@@ -1,30 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@nextui-org/spinner";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { todoAction, getTodos } from "@/app/about/actions";
+import {
+  todoAction,
+  getTodos,
+  toggleCompleteAction,
+} from "@/app/about/actions";
 
 export function Todo() {
+  const queryClient = useQueryClient();
   const [newTodo, setNewTodo] = useState({
     title: "",
     description: "",
     dueDate: "",
   });
-  const queryClient = useQueryClient();
 
   const {
     data: todos,
     isError,
     isLoading,
-    isSuccess,
   } = useQuery({
-    queryKey: ["allTodos"],
+    queryKey: ["allFormattedTodos"],
     queryFn: () => getTodos(),
     select: (todos) => {
       return todos.map((todo) => ({
@@ -34,6 +37,22 @@ export function Todo() {
         dueDate: todo.due_date,
         completed: todo.completed,
       }));
+    },
+  });
+
+  const { mutate: toggleCompleteMutate } = useMutation({
+    mutationKey: ["toggleComplete"],
+    mutationFn: toggleCompleteAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
+    },
+  });
+
+  const { mutate: addTodoMutate } = useMutation({
+    mutationKey: ["addTodo"],
+    mutationFn: todoAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
     },
   });
 
@@ -51,27 +70,23 @@ export function Todo() {
 
     const formData = new FormData(e.currentTarget);
 
-    await todoAction(formData);
+    //await todoAction(formData);
 
-    if (newTodo.title.trim() !== "") {
-      setNewTodo({
-        title: "",
-        description: "",
-        dueDate: "",
-      });
-    }
-
-    queryClient.invalidateQueries({ queryKey: ["allTodos"] });
+    addTodoMutate(formData, {
+      onSuccess: () => {
+        if (newTodo.title.trim() !== "") {
+          setNewTodo({
+            title: "",
+            description: "",
+            dueDate: "",
+          });
+        }
+      },
+    });
   };
 
   const handleToggleComplete = (id: string) => {
-    queryClient.setQueryData(["allTodos"], () => {
-      if (isSuccess) {
-        return todos?.map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-        );
-      }
-    });
+    toggleCompleteMutate({ id });
   };
 
   if (isLoading) return <Spinner />;

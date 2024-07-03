@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
+import { eq } from "drizzle-orm";
 
 import { db } from "@/drizzle/db";
 import { todos, users } from "@/drizzle/schema/schema";
@@ -30,24 +31,35 @@ export const todoAction = async (formData: FormData) => {
 };
 
 export const getTodos = cache(async () => {
-  const todos = await db.query.todos.findMany();
-
-  return todos.reverse();
+  return (await db.query.todos.findMany()).toReversed();
 });
 
 export const addUser = async () => {
-  type NewUser = typeof users.$inferInsert;
-  const insertUser = async (user: NewUser) => {
-    //return db.insert(users).values(user);
+  //type NewUser = typeof users.$inferInsert;
+  (async () => {
+    db.insert(users)
+      .values({
+        name: "Alice Rice",
+        email: "alice@example.com",
+        password: "alice",
+        role: "admin",
+      })
+      .returning();
+  })();
+};
 
-    return db.insert(users).values({
-      name: "Alice Rice",
-      email: "alice@example.com",
-      password: "alice",
-      role: "admin",
+export const toggleCompleteAction = async ({ id }: { id: string }) => {
+  await db.transaction(async (tx) => {
+    const todo = await tx.query.todos.findFirst({
+      where: eq(todos.id, id),
     });
-  };
-  const newUser: NewUser = { name: "Alef" };
 
-  await insertUser(newUser);
+    await tx
+      .update(todos)
+      .set({
+        completed: !todo?.completed,
+      })
+      .where(eq(todos.id, id))
+      .returning({ completed: todos.completed });
+  });
 };
