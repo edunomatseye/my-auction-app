@@ -27,7 +27,7 @@ export const todoAction = async (formData: FormData) => {
 
   await insertTodo(newForm);
 
-  revalidatePath("/about");
+  //revalidatePath("/about");
 };
 
 export const getTodos = cache(async () => {
