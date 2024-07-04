@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@nextui-org/spinner";
+import toast, { Toaster } from "react-hot-toast";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -52,8 +53,35 @@ export function Todo() {
   const { mutate: addTodoMutate } = useMutation({
     mutationKey: ["addTodo"],
     mutationFn: todoAction,
-    onSuccess: () => {
+    onMutate: async (newTodo) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ["allFormattedTodos"] });
+
+      // Snapshot the previous value
+      const previousTodos = queryClient.getQueryData(["allFormattedTodos"]);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(["allFormattedTodos"], (old: any[]) => [
+        ...old,
+        newTodo,
+      ]);
+
+      // Return a context object with the snapshotted value
+      return { previousTodos, newTodo };
+    },
+    // If the mutation fails,
+    // use the context returned from onMutate to roll back
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(["allFormattedTodos"], context?.previousTodos);
+      toast.error("Error adding todo");
+    },
+    // Always refetch after error or success:
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
+    },
+    onSuccess: () => {
+      toast.success("Todo added successfully");
     },
   });
 
@@ -62,6 +90,7 @@ export function Todo() {
     mutationFn: removeTodoAction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
+      toast.error("Todo removed successfully");
     },
   });
 
@@ -78,8 +107,6 @@ export function Todo() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-
-    //await todoAction(formData);
 
     addTodoMutate(formData, {
       onSuccess: () => {
@@ -199,6 +226,7 @@ export function Todo() {
           <Button type="submit">Add Todo</Button>
         </form>
       </div>
+      <Toaster />
     </div>
   );
 }

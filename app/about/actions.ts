@@ -2,6 +2,7 @@
 
 import { cache } from "react";
 import { asc, eq } from "drizzle-orm";
+import { z } from "zod";
 
 import { db } from "@/drizzle/db";
 import { todos, users } from "@/drizzle/schema/schema";
@@ -24,7 +25,18 @@ export const todoAction = async (formData: FormData) => {
     description: description as string,
   };
 
-  await insertTodo(newForm);
+  const todoSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    due_date: z.string().date(),
+  });
+  const validated = todoSchema.safeParse(newForm);
+
+  if (!validated.success) {
+    throw new Error("Error adding todo: " + validated.error.message);
+  } else {
+    await insertTodo(newForm);
+  }
 };
 
 export const getTodos = cache(async () => {
@@ -32,7 +44,7 @@ export const getTodos = cache(async () => {
     await db.query.todos.findMany({
       orderBy: asc(todos.created_at),
     })
-  ).toReversed();
+  ).reverse();
 });
 
 export const removeTodoAction = async ({ id }: { id: string }) => {

@@ -8,7 +8,7 @@ import { animals } from "@/app/blog/data";
 
 export function ButtonUp() {
   const queryClient = useQueryClient();
-  const result = queryClient.getQueryData(["allTodos"]);
+  const result = queryClient.getQueryData(["allTodos"])!;
   const [value, setValue] = React.useState<number | string | null | undefined>(
     "cat",
   );
