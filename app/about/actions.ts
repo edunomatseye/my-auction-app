@@ -35,6 +35,10 @@ export const getTodos = cache(async () => {
   ).toReversed();
 });
 
+export const removeTodoAction = async ({ id }: { id: string }) => {
+  await db.delete(todos).where(eq(todos.id, id));
+};
+
 export const addUser = async () => {
   //type NewUser = typeof users.$inferInsert;
   (async () => {

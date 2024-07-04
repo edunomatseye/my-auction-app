@@ -1,6 +1,3 @@
-"use client";
-
-import React, { useRef } from "react";
 import {
   Card,
   CardHeader,
@@ -9,33 +6,12 @@ import {
   Divider,
   Link,
   Image,
-  Button,
 } from "@nextui-org/react";
 
+import UploadForm from "@/app/pricing/uploadForm";
 import { title } from "@/components/primitives";
 
-export default function PricingPage() {
-  const url = "/api/profile/uploadImage";
-  const fileInput = useRef<HTMLInputElement>(null);
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    //formData.append("file", fileInput?.current?.files?.[0]!);
-
-    if (fileInput.current) {
-      const response = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
-      const result = await response.json();
-
-      console.log(result);
-    }
-  };
-
+export default async function PricingPage() {
   return (
     <>
       <h1 className={title()}>Pricing</h1>
@@ -56,19 +32,7 @@ export default function PricingPage() {
         <Divider />
         <CardBody>
           <p>Make beautiful websites regardless of your design experience.</p>
-          <div>
-            <div>
-              <form className="form" onSubmit={onSubmit}>
-                <label>
-                  <span>Upload an Image </span>
-                  <input ref={fileInput} name="file" type="file" />
-                </label>
-                <Button radius="full" size="sm" type="submit">
-                  Upload
-                </Button>
-              </form>
-            </div>
-          </div>
+          <UploadForm />
         </CardBody>
         <Divider />
         <CardFooter>

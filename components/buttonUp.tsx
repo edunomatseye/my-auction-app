@@ -1,12 +1,17 @@
 "use client";
 
 import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Autocomplete, AutocompleteItem, Avatar } from "@nextui-org/react";
 
 import { animals } from "@/app/blog/data";
 
 export function ButtonUp() {
-  const [value, setValue] = React.useState<React.Key>("cat");
+  const queryClient = useQueryClient();
+  const result = queryClient.getQueryData(["allTodos"]);
+  const [value, setValue] = React.useState<number | string | null | undefined>(
+    "cat",
+  );
 
   return (
     <div className="flex w-full max-w-xs flex-col gap-2">
@@ -18,7 +23,6 @@ export function ButtonUp() {
         className="max-w-xs"
         defaultItems={animals}
         label="Favorite Animal"
-        multiple={true}
         placeholder="Search an animal"
         selectedKey={value}
         variant="bordered"
@@ -37,6 +41,7 @@ export function ButtonUp() {
         <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
         <Avatar name="Joe" />
       </div>
+      <div>{JSON.stringify(result, null, 4)}</div>
     </div>
   );
 }

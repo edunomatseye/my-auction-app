@@ -29,10 +29,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-  pricing,
 }: {
   children: React.ReactNode;
-  pricing: React.ReactNode;
 }) {
   return (
     <html suppressHydrationWarning lang="en">

@@ -7,14 +7,12 @@ import {
   uniqueIndex,
   serial,
   varchar,
-  foreignKey,
   timestamp,
   jsonb,
   uuid,
   date,
   boolean,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 
 export const popularity = pgEnum("popularity", ["unknown", "known", "popular"]);
 
@@ -93,7 +91,9 @@ export const todos = pgTable("todos", {
     .notNull()
     .references(() => users.id),
   created_at: timestamp("created_at", { mode: "string" }).defaultNow(),
-  updated_at: timestamp("updated_at", { mode: "string" }),
+  updated_at: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
 });
 
 export const groups = pgTable("groups", {

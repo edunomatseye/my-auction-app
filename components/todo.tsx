@@ -12,6 +12,7 @@ import {
   todoAction,
   getTodos,
   toggleCompleteAction,
+  removeTodoAction,
 } from "@/app/about/actions";
 
 export function Todo() {
@@ -56,6 +57,14 @@ export function Todo() {
     },
   });
 
+  const { mutate: removeTodoMutate } = useMutation({
+    mutationKey: ["removeTodo"],
+    mutationFn: removeTodoAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
+    },
+  });
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -83,6 +92,10 @@ export function Todo() {
         }
       },
     });
+  };
+
+  const handleTodoRemove = async (id: string) => {
+    removeTodoMutate({ id });
   };
 
   const handleToggleComplete = (id: string) => {
@@ -124,7 +137,7 @@ export function Todo() {
               Due: {todo.dueDate}
             </div>
             <button
-              className={`mt-2 px-4 py-2 rounded-md transition-colors ${
+              className={`m-2 px-4 py-2 rounded-sm transition-colors ${
                 todo.completed
                   ? "bg-primary text-primary-foreground hover:bg-primary/90"
                   : "bg-muted text-muted-foreground hover:bg-muted/90"
@@ -132,6 +145,12 @@ export function Todo() {
               onClick={() => handleToggleComplete(todo.id)}
             >
               {todo.completed ? "Undo" : "Complete"}
+            </button>
+            <button
+              className={`mt-2 px-4 py-2 rounded-sm transition-colors bg-primary text-primary-foreground hover:bg-primary/90`}
+              onClick={() => handleTodoRemove(todo.id)}
+            >
+              X
             </button>
           </div>
         ))}
