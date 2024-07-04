@@ -7,7 +7,7 @@ import { Spinner } from "@nextui-org/spinner";
 import { getTodos } from "@/app/about/actions";
 import { title } from "@/components/primitives";
 
-export default function DocsPage() {
+export default function DocsPage({ params }: { params: { username: string } }) {
   const { data, isLoading, isError } = useQuery({
     queryFn: async () => await getTodos(),
     queryKey: ["allTodos"], //Array according to Documentation
@@ -19,7 +19,7 @@ export default function DocsPage() {
   return (
     <div>
       <h1 className={title()}>Docs</h1>
-      <h2>Using useQuery and populating the cache</h2>
+      <h2>Using useQuery and populating the cache:- NO</h2>
       <span>{JSON.stringify(data, null, 4)}</span>
     </div>
   );

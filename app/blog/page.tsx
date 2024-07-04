@@ -7,7 +7,7 @@ import { ButtonUp } from "@/components/buttonUp";
 
 export default function BlogPage() {
   const queryClient = useQueryClient();
-  const result = queryClient.getQueryData(["todos"]);
+  const result = queryClient.getQueryData(["allTodos"]);
 
   return (
     <div>
