@@ -15,12 +15,12 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   response.cookies.set("vercel", "fast");
+  response.cookies.set("tech", "nex-js");
   response.cookies.set({
     name: "teo",
     value: "technologies",
     path: "/",
   });
-  response.cookies.get("vercel");
 
   return response;
 }
