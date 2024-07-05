@@ -3,11 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@nextui-org/spinner";
 
-import { getTodos } from "@/app/about/actions";
+import { getTodosAction } from "@/app/about/actions";
 
 export default function Docs({ username }: { username?: string }) {
   const { data, isLoading, isError } = useQuery({
-    queryFn: async () => await getTodos(),
+    queryFn: async () => await getTodosAction(),
     queryKey: ["allTodos"], //Array according to Documentation
   });
 

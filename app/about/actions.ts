@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { db } from "@/drizzle/db";
 import { todos, users } from "@/drizzle/schema/schema";
-export const todoAction = async (formData: FormData) => {
+export const addTodoAction = async (formData: FormData) => {
   //const form = Object.fromEntries(formData);
 
   const dueDate = formData.get("dueDate");
@@ -39,7 +39,7 @@ export const todoAction = async (formData: FormData) => {
   }
 };
 
-export const getTodos = cache(async () => {
+export const getTodosAction = cache(async () => {
   return (
     await db.query.todos.findMany({
       orderBy: asc(todos.created_at),
@@ -51,7 +51,7 @@ export const removeTodoAction = async ({ id }: { id: string }) => {
   await db.delete(todos).where(eq(todos.id, id));
 };
 
-export const addUser = async () => {
+export const addUserAction = async () => {
   //type NewUser = typeof users.$inferInsert;
   (async () => {
     db.insert(users)

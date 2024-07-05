@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
-  todoAction,
-  getTodos,
+  addTodoAction,
+  getTodosAction,
   toggleCompleteAction,
   removeTodoAction,
 } from "@/app/about/actions";
@@ -30,7 +30,7 @@ export function Todo() {
     isLoading,
   } = useQuery({
     queryKey: ["allFormattedTodos"],
-    queryFn: () => getTodos(),
+    queryFn: () => getTodosAction(),
     select: (todos) => {
       return todos.map((todo) => ({
         id: todo.id,
@@ -52,7 +52,7 @@ export function Todo() {
 
   const { mutate: addTodoMutate } = useMutation({
     mutationKey: ["addTodo"],
-    mutationFn: todoAction,
+    mutationFn: addTodoAction,
     onMutate: async (newTodo) => {
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
