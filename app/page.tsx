@@ -17,6 +17,7 @@ export default function Home() {
         <h1 className={title()}>
           websites regardless of your design experience.
         </h1>
+        <h1>Home</h1>
         <h2 className={subtitle({ class: "mt-4" })}>
           Beautiful, fast and modern React UI library.
         </h2>
@@ -50,6 +51,9 @@ export default function Home() {
             Get started by editing <Code color="primary">app/page.tsx</Code>
           </span>
         </Snippet>
+      </div>
+      <div>
+        <Link href="/about">About</Link>
       </div>
     </section>
   );
