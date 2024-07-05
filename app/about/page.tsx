@@ -1,10 +1,14 @@
+import Link from "next/link";
+
 import { title } from "@/components/primitives";
 import { Todo } from "@/components/todo";
 
 export default async function AboutPage() {
   return (
     <div>
-      <h1 className={title()}>About</h1>
+      <h2 className={title()}>About</h2>
+      <h1>AboutUs</h1>
+      <Link href="/">Home</Link>
       <div>
         <Todo />
       </div>
