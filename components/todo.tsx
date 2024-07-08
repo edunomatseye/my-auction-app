@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Spinner } from "@nextui-org/spinner";
-import toast, { Toaster } from "react-hot-toast";
+import { Spinner } from "@nextui-org/react";
+import toast from "react-hot-toast";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";

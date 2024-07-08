@@ -2,15 +2,23 @@
 
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Input, Button } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-import UserIcon from "./icon/UserIcon";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Label } from "./ui/label";
 
-//import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -64,7 +72,7 @@ export default function LoginForm() {
   });
 
   const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    //console.log(data);
+    console.log(data);
     toast.success("Login successfull");
     loginMutator.mutate(data);
     //reset(emptyValues);
@@ -74,30 +82,51 @@ export default function LoginForm() {
     <div>
       <div>loginForm</div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          {...register("email", { required: true })}
-          className="max-w-xs"
-          label="Email"
-          placeholder="email"
-          type="email"
-        />
-        {errors.email && <span role="alert">{errors.email.message}</span>}
-        <Input
-          {...register("password", { required: true })}
-          className="max-w-xs"
-          label="Password"
-          placeholder="password"
-          type="password"
-        />
-        {errors.password && <span role="alert">{errors.password.message}</span>}
-        <Button
-          color="success"
-          name="login"
-          startContent={<UserIcon />}
-          type="submit"
-        >
-          Login
-        </Button>
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Project Login</CardTitle>
+            <CardDescription>
+              Deploy your new project in one-click.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Email</Label>
+
+                <Input
+                  {...register("email", { required: true })}
+                  className="max-w-xs"
+                  label="Email"
+                  placeholder="email"
+                  type="email"
+                />
+                {errors.email && (
+                  <span role="alert">{errors.email.message}</span>
+                )}
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Password</Label>
+                <Input
+                  {...register("password", { required: true })}
+                  className="max-w-xs"
+                  label="Password"
+                  placeholder="password"
+                  type="password"
+                />
+                {errors.password && (
+                  <span role="alert">{errors.password.message}</span>
+                )}
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            {/* <Button name="login" startContent={<UserIcon />} type="submit"> */}
+            <Button name="login" type="submit">
+              Login
+            </Button>
+          </CardFooter>
+        </Card>
       </form>
     </div>
   );

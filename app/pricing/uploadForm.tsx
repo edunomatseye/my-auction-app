@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@nextui-org/button";
 import React, { useRef } from "react";
+
+import { Button } from "@/components/ui/button";
 
 function UploadForm() {
   const url = "/api/profile/uploadImage";
@@ -28,9 +29,11 @@ function UploadForm() {
           <span>Upload an Image </span>
           <input ref={fileInput} name="file" type="file" />
         </label>
-        <Button radius="full" size="sm" type="submit">
-          Upload
-        </Button>
+        <div className="flex justify-between mt-10">
+          <Button size="sm" type="submit">
+            Upload Image
+          </Button>
+        </div>
       </form>
     </div>
   );
