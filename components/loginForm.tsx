@@ -6,6 +6,7 @@ import { Input, Button } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 import UserIcon from "./icon/UserIcon";
 
@@ -63,7 +64,8 @@ export default function LoginForm() {
   });
 
   const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    console.log(data);
+    //console.log(data);
+    toast.success("Login successfull");
     loginMutator.mutate(data);
     //reset(emptyValues);
   };

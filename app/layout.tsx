@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/link";
 import clsx from "clsx";
+import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./providers";
 
@@ -61,6 +62,7 @@ export default function RootLayout({
                 <p className="text-primary">Love</p>
               </Link>
             </footer>
+            <Toaster />
           </div>
         </Providers>
       </body>

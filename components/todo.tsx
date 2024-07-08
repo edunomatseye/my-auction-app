@@ -90,7 +90,7 @@ export function Todo() {
     mutationFn: removeTodoAction,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allFormattedTodos"] });
-      toast.error("Todo removed successfully");
+      toast.success("Todo removed successfully");
     },
   });
 
@@ -226,7 +226,6 @@ export function Todo() {
           <Button type="submit">Add Todo</Button>
         </form>
       </div>
-      <Toaster />
     </div>
   );
 }

@@ -1,73 +1,72 @@
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { expect, it, describe, afterEach } from "vitest";
+// loginForm.test.jsx
+
+import React from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as React from "react";
 
-import LoginForm from "./loginForm"; // Assuming LoginForm is in the same directory
-// Configure a default query client for testing
-const defaultQueryClient = new QueryClient();
+import LoginForm from "./loginForm";
 
-// Custom render function with React Query provider
-const customRender = (ui: React.ReactNode, options = {}) => {
-  const Wrapper = ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={defaultQueryClient}>
-      {children}
-    </QueryClientProvider>
-  );
+const queryClient = new QueryClient();
 
-  return render(ui, { wrapper: Wrapper, ...options });
-};
+const WrappedLoginForm = () => (
+  <QueryClientProvider client={queryClient}>
+    <LoginForm />
+  </QueryClientProvider>
+);
 
-// Override global render function with customRender
-//global.render = customRender;
-
-// Reset query client after each test
-afterEach(() => {
-  defaultQueryClient.resetQueries();
-});
-
-describe("LoginForm", () => {
-  it("should render correctly", async () => {
-    customRender(<LoginForm />);
-
-    expect(screen.getByText("loginForm")).toBeDefined();
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeDefined();
-    expect(screen.getByLabelText(/Password/i)).toBeDefined();
-    expect(screen.getByRole("button", { name: /login/i })).toBeDefined();
+describe("LoginForm Component", () => {
+  beforeEach(() => {
+    render(<WrappedLoginForm />);
   });
 
-  it.skip("should show validation errors for empty fields", async () => {
-    customRender(<LoginForm />);
-
-    await userEvent.click(screen.getByRole("button", { name: /login/i }));
-
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/password is required/i)).toBeInTheDocument();
+  afterEach(() => {
+    queryClient.clear();
   });
 
-  it.skip("should show validation error for invalid email", async () => {
-    customRender(<LoginForm />);
+  it("renders the form with default values", () => {
+    const emailInput = screen.getByPlaceholderText("email");
+    const passwordInput = screen.getByPlaceholderText("password");
 
-    await userEvent.type(screen.getByLabelText(/email/i), "invalid_email");
-    await userEvent.click(screen.getByRole("button", { name: /login/i }));
-
-    expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(
-      screen.getByText(/Please provide a valid email address/i),
-    ).toBeInTheDocument();
+    expect(emailInput).toBeDefined();
+    expect(passwordInput).toBeDefined();
+    expect(emailInput).toContain("olowo@bab.com");
+    expect(passwordInput).toContain("olowo@bab.com");
   });
 
-  // Consider mocking `useMutation` for more comprehensive testing
-  // (outside the scope of this example)
-  it.skip("should submit the form with valid data (consider mocking useMutation)", async () => {
-    const { findByLabelText, getByLabelText, getByRole } = customRender(<LoginForm />);
+  it("displays error messages on invalid form submission", async () => {
+    const emailInput = screen.getByPlaceholderText("email");
+    const passwordInput = screen.getByPlaceholderText("password");
+    const submitButton = screen.getByText("Login");
 
-    await userEvent.type(await findByLabelText(/Email/i), "valid@email.com");
-    await userEvent.type(getByLabelText(/Password/i), "password123");
-    await userEvent.click(getByRole("button", { name: /login/i }));
+    // Clear the input values to trigger validation errors
+    fireEvent.change(emailInput, { target: { value: "" } });
+    fireEvent.change(passwordInput, { target: { value: "" } });
 
-    // Assertions for form submission logic (consider mocking useMutation)
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toContain(
+        "Please provide a valid email address",
+      );
+    });
+  });
+
+  it("submits the form with valid data", async () => {
+    const emailInput = screen.getAllByPlaceholderText("email");
+    const passwordInput = screen.getAllByPlaceholderText("password");
+    const submitButton = screen.getAllByText("Login");
+
+    // Fill in the form with valid data
+    fireEvent.change(emailInput[0], { target: { value: "test@example.com" } });
+    fireEvent.change(passwordInput[0], { target: { value: "password123" } });
+
+    fireEvent.click(submitButton[0]);
+
+    await waitFor(() => {
+      // Ensure the default values are reset after form submission
+      expect(emailInput[0].value).toBe("test@example.com");
+      expect(passwordInput[0].value).toBe("password123");
+    });
   });
 });
