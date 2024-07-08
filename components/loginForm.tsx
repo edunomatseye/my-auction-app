@@ -5,8 +5,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Input, Button } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
 
 import UserIcon from "./icon/UserIcon";
+
+//import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
   const loginFormSchema = z.object({
@@ -21,6 +24,11 @@ export default function LoginForm() {
     password: "olowo@bab.com",
   };
 
+  const emptyValues = {
+    email: "",
+    password: "",
+  };
+
   const {
     register,
     reset,
@@ -31,8 +39,33 @@ export default function LoginForm() {
     defaultValues,
   });
 
+  const createLogin = async (data: LoginForm) => {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const dat = await response.json();
+
+    console.log(dat);
+  };
+
+  const loginMutator = useMutation({
+    mutationKey: ["loginForm"],
+    mutationFn: createLogin,
+    onSuccess: () => {
+      console.log("success");
+      reset(emptyValues);
+    },
+  });
+
   const onSubmit: SubmitHandler<LoginForm> = (data) => {
     console.log(data);
+    loginMutator.mutate(data);
+    //reset(emptyValues);
   };
 
   return (
@@ -42,6 +75,7 @@ export default function LoginForm() {
         <Input
           {...register("email", { required: true })}
           className="max-w-xs"
+          label="Email"
           placeholder="email"
           type="email"
         />
@@ -49,11 +83,17 @@ export default function LoginForm() {
         <Input
           {...register("password", { required: true })}
           className="max-w-xs"
+          label="Password"
           placeholder="password"
           type="password"
         />
         {errors.password && <span role="alert">{errors.password.message}</span>}
-        <Button color="success" startContent={<UserIcon />} type="submit">
+        <Button
+          color="success"
+          name="login"
+          startContent={<UserIcon />}
+          type="submit"
+        >
           Login
         </Button>
       </form>
