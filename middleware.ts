@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 
 import { NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function middleware2(request: NextRequest) {
   // Assume a "Cookie:nextjs=fast" header to be present on the incoming request
   // Getting cookies from the request using the `RequestCookies` API
   request.cookies.get("nextjs");
@@ -24,3 +24,5 @@ export function middleware(request: NextRequest) {
 
   return response;
 }
+
+export { auth as middleware } from "./auth";

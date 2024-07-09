@@ -6,6 +6,7 @@ import { button as buttonStyles } from "@nextui-org/react";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
+import { SignIn } from "@/components/sign-in";
 
 export default function Home() {
   return (
@@ -54,6 +55,7 @@ export default function Home() {
       </div>
       <div>
         <Link href="/about">About</Link>
+        <SignIn />
       </div>
     </section>
   );
