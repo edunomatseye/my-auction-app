@@ -10,8 +10,11 @@ import {
 
 import UploadForm from "@/app/pricing/uploadForm";
 import { title } from "@/components/primitives";
+import { auth } from "@/lib/auth";
 
 export default async function PricingPage() {
+  const session = await auth();
+
   return (
     <>
       <h1 className={title()}>Pricing</h1>
@@ -21,7 +24,8 @@ export default async function PricingPage() {
             alt="nextui logo"
             height={40}
             radius="sm"
-            src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            //src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            src={session?.user?.image || undefined}
             width={40}
           />
           <div className="flex flex-col">
