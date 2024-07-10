@@ -36,7 +36,7 @@ function UploadForm() {
           <Button size="sm" type="submit">
             Upload Image
           </Button>
-          {session?.data?.user?.image}
+
           {!session.data ? (
             <Button onClick={() => signIn()}>Sign In</Button>
           ) : (
