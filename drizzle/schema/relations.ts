@@ -9,6 +9,7 @@ import {
   profiles,
   todos,
   users_to_groups,
+  accounts,
 } from "./schema";
 
 export const citiesRelations = relations(cities, ({ one }) => ({
@@ -30,6 +31,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   posts: many(posts),
   profiles: many(profiles),
   todos: many(todos),
+  accounts: many(accounts),
   users_to_groups: many(users_to_groups),
 }));
 
@@ -55,6 +57,13 @@ export const profilesRelations = relations(profiles, ({ one }) => ({
 export const todosRelations = relations(todos, ({ one }) => ({
   user: one(users, {
     fields: [todos.author_id],
+    references: [users.id],
+  }),
+}));
+
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
     references: [users.id],
   }),
 }));

@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/schema/*.ts", "**/*.tsx", ".next/types/**/*.ts", "drizzle.config.ts", "drizzle/migrate.ts", "components/icon/UserIcon.jsx"],
+  "include": ["next-env.d.ts", "**/schema/*.ts", "**/*.tsx", ".next/types/**/*.ts", "drizzle.config.ts", "drizzle/migrate.ts", "components/**/*.jsx", "lib/**/*.ts"],
   "exclude": ["node_modules"]
 }

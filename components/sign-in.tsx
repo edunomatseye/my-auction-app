@@ -1,6 +1,6 @@
 import React from "react";
 
-import { signIn } from "@/auth";
+import { signIn } from "@/lib/auth";
 
 export function SignIn() {
   return (
