@@ -6,9 +6,14 @@ import { button as buttonStyles } from "@nextui-org/react";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
-import { SignIn } from "@/components/sign-in";
+import { SignIn, SignOut } from "@/components/sign-in";
+import { auth } from "@/lib/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
+  //if (!session?.user) return null;
+
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-lg text-center justify-center">
@@ -55,7 +60,7 @@ export default function Home() {
       </div>
       <div>
         <Link href="/about">About</Link>
-        <SignIn />
+        {!session?.user ? <SignIn /> : <SignOut />}
       </div>
     </section>
   );

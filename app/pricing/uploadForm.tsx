@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useRef } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 
 function UploadForm() {
+  const session = useSession();
+
   const url = "/api/profile/uploadImage";
   const fileInput = useRef<HTMLInputElement>(null);
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,6 +36,11 @@ function UploadForm() {
           <Button size="sm" type="submit">
             Upload Image
           </Button>
+          {!session.data ? (
+            <Button onClick={() => signIn()}>Sign In</Button>
+          ) : (
+            <Button onClick={() => signOut()}>Signout</Button>
+          )}
         </div>
       </form>
     </div>

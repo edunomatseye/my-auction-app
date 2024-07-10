@@ -3,6 +3,7 @@ import { Metadata, Viewport } from "next";
 import { Link } from "@nextui-org/react";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
+import { Session } from "next-auth";
 
 import { Providers } from "./providers";
 
@@ -30,8 +31,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
+  session,
 }: {
   children: React.ReactNode;
+  session: Session;
 }) {
   return (
     <html suppressHydrationWarning className="light" lang="en">
@@ -45,7 +48,10 @@ export default function RootLayout({
           fontBody.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <Providers
+          session={session}
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+        >
           <div className="relative flex flex-col h-screen">
             <Navbar />
             <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
