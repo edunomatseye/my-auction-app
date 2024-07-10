@@ -18,6 +18,16 @@ import {
 
 export function Todo() {
   const queryClient = useQueryClient();
+
+  type Todo =
+    | {
+        id: string;
+        title: string | null;
+        description: string | null;
+        dueDate: string | null;
+        completed: boolean | null;
+      }[]
+    | undefined;
   const [newTodo, setNewTodo] = useState({
     title: "",
     description: "",
@@ -62,7 +72,7 @@ export function Todo() {
       const previousTodos = queryClient.getQueryData(["allFormattedTodos"]);
 
       // Optimistically update to the new value
-      queryClient.setQueryData(["allFormattedTodos"], (old: any[]) => [
+      queryClient.setQueryData(["allFormattedTodos"], (old: Todo[]) => [
         ...old,
         newTodo,
       ]);
@@ -138,7 +148,7 @@ export function Todo() {
         <h2 className="text-2xl font-bold mb-4">Todo List</h2>
         {todos?.map((todo) => (
           <div
-            key={todo.id}
+            key={todo.title}
             className={`bg-card p-4 rounded-lg mb-4 border transition-colors ${
               todo.completed
                 ? "border-primary text-muted-foreground"
