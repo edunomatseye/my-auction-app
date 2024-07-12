@@ -24,7 +24,7 @@ export const posts = pgTable("posts", {
   content: text("content"),
   author_id: uuid("author_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => users.id),
 });
 
 export const groups = pgTable("groups", {
@@ -56,15 +56,15 @@ export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey().notNull(),
   user_id: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => users.id),
   metadata: jsonb("metadata").default({ foo: "bar" }),
 });
 
-export const session = pgTable("session", {
+export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").primaryKey().notNull(),
   userId: uuid("userId")
     .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
+    .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "string" }).notNull(),
 });
 
@@ -72,13 +72,13 @@ export const users_to_groups = pgTable("users_to_groups", {
   id: serial("id").primaryKey().notNull(),
   user_id: uuid("user_id")
     .notNull()
-    .references(() => user.id),
+    .references(() => users.id),
   group_id: integer("group_id")
     .notNull()
     .references(() => groups.id),
 });
 
-export const user = pgTable("user", {
+export const users = pgTable("user", {
   id: uuid("id").defaultRandom().primaryKey().notNull(),
   name: text("name"),
   email: text("email").notNull(),
@@ -104,7 +104,7 @@ export const todos = pgTable("todos", {
   updated_at: timestamp("updated_at", { precision: 3, mode: "string" }),
 });
 
-export const verificationToken = pgTable(
+export const verificationTokens = pgTable(
   "verificationToken",
   {
     identifier: text("identifier").notNull(),
@@ -121,12 +121,12 @@ export const verificationToken = pgTable(
   }
 );
 
-export const authenticator = pgTable(
+export const authenticators = pgTable(
   "authenticator",
   {
     userId: uuid("userId")
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     credentialID: text("credentialID").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
     credentialPublicKey: text("credentialPublicKey").notNull(),
@@ -148,12 +148,12 @@ export const authenticator = pgTable(
   }
 );
 
-export const account = pgTable(
+export const accounts = pgTable(
   "account",
   {
     userId: uuid("userId")
       .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),

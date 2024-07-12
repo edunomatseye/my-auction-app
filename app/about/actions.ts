@@ -5,7 +5,7 @@ import { asc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/drizzle/db";
-import { todos, user } from "@/drizzle/schema/schema";
+import { todos, users } from "@/drizzle/schema/schema";
 export const addTodoAction = async (formData: FormData) => {
   //const form = Object.fromEntries(formData);
 
@@ -52,9 +52,9 @@ export const removeTodoAction = async ({ id }: { id: string }) => {
 };
 
 export const addUserAction = async () => {
-  //type NewUser = typeof user.$inferInsert;
+  //type NewUser = typeof users.$inferInsert;
   (async () => {
-    db.insert(user)
+    db.insert(users)
       .values({
         name: "Alice Rice",
         email: "alice@example.com",

@@ -25,6 +25,7 @@
     "@tanstack/react-query-devtools": "^5.49.2",
     "@testing-library/user-event": "^14.5.2",
     "autoprefixer": "10.4.19",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
@@ -48,6 +49,8 @@
   "devDependencies": {
     "@playwright/test": "^1.45.1",
     "@testing-library/react": "^16.0.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "20.5.7",
     "@types/pg": "^8.11.6",
     "@types/react": "18.3.3",

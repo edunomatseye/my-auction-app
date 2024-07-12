@@ -25,7 +25,10 @@ export default async function PricingPage() {
             height={40}
             radius="sm"
             //src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-            src={session?.user?.image || undefined}
+            src={
+              session?.user?.image ??
+              "https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            }
             width={40}
           />
           <div className="flex flex-col">
