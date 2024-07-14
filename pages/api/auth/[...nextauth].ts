@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 
 import NextAuth from "next-auth";
+import * as Sentry from "@sentry/browser";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { ZodError } from "zod";
 import Credentials from "next-auth/providers/credentials";
@@ -41,4 +42,16 @@ export default NextAuth({
   session: { strategy: "jwt" },
   secret: process.env.NEXTAUTH_SECRET,
   providers: [CredentialsProvider],
+  callbacks: {
+    session({ session, user }) {
+      const scope = Sentry.getCurrentScope();
+
+      scope.setUser({
+        id: user.id,
+        email: user.email,
+      });
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig);
