@@ -2,6 +2,7 @@
   "name": "auctioning",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -38,6 +39,7 @@
     "next-themes": "^0.2.1",
     "pg": "^8.12.0",
     "postcss": "8.4.38",
+    "postgres": "^3.4.4",
     "react": "^18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.1",
