@@ -7,17 +7,17 @@ import { db } from "@/drizzle/db";
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
-  callbacks: {
-    session({ session, user }) {
-      const scope = Sentry.getCurrentScope();
+  // callbacks: {
+  //   session({ session, user }) {
+  //     const scope = Sentry.getCurrentScope();
 
-      scope.setUser({
-        id: user.id,
-        email: user.email,
-      });
+  //     scope.setUser({
+  //       id: user.id,
+  //       email: user.email,
+  //     });
 
-      return session;
-    },
-  },
+  //     return session;
+  //   },
+  // },
   ...defaultAuthConfig,
 });

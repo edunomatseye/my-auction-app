@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import { Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -78,10 +78,14 @@ export default function LoginForm() {
     //reset(emptyValues);
   };
 
+  const onError: SubmitErrorHandler<LoginForm> = (errors) => {
+    console.log(errors);
+  };
+
   return (
     <div>
       <div>loginForm</div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)}>
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Project Login</CardTitle>
