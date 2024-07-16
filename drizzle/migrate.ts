@@ -7,9 +7,6 @@ import { migrationClient } from "./db";
 // This will run migrations on the database, skipping the ones already applied
 (async function () {
   await migrate(drizzle(migrationClient), {
-    migrationsFolder: "./drizzle/schema",
+    migrationsFolder: "./drizzle/migrations",
   });
 })();
-
-// Don't forget to close the connection, otherwise the script will hang
-//await client.end();

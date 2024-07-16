@@ -1,5 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
+// import { auth } from "../lib/auth";
+
+// const session = await auth();
+// const supabaseAccessToken = session?.supabaseAccessToken;
+
 //import { Database } from "./database.types";
 
 const options = {
@@ -11,13 +16,13 @@ const options = {
     persistSession: true,
     detectSessionInUrl: true,
   },
-  global: {
-    headers: { "x-my-iteo-header": "my-auction-app" },
-  },
+  //   global: {
+  //     headers: { Authorization: `Bearer ${supabaseAccessToken}` },
+  //   },
 } as const;
 
 export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
   options
 );

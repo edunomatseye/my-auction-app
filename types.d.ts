@@ -15,6 +15,7 @@ declare module "next-auth" {
    * Returned by `useSession`, `auth`, contains information about the active session.
    */
   interface Session {
+    supabaseAccessToken?: string;
     user: {
       /** The user's postal address. */
       address: string;

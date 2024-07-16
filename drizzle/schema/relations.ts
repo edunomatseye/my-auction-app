@@ -1,37 +1,72 @@
 import { relations } from "drizzle-orm/relations";
 
 import {
-  users,
-  posts,
+  user,
+  todos,
+  profiles,
+  session,
+  groups,
+  users_to_groups,
   countries,
   cities,
-  profiles,
-  sessions,
-  users_to_groups,
-  groups,
-  authenticators,
-  accounts,
+  posts,
+  authenticator,
+  account,
 } from "./schema";
 
-export const postsRelations = relations(posts, ({ one }) => ({
-  user: one(users, {
-    fields: [posts.author_id],
-    references: [users.id],
+export const todosRelations = relations(todos, ({ one }) => ({
+  user: one(user, {
+    fields: [todos.author_id],
+    references: [user.id],
   }),
 }));
 
-export const userRelations = relations(users, ({ one, many }) => ({
-  posts: many(posts),
+export const userRelations = relations(user, ({ one, many }) => ({
+  todos: many(todos),
   profiles: many(profiles),
-  sessions: many(sessions),
-  users_to_groups: many(users_to_groups),
+  sessions: many(session),
   group: one(groups, {
-    fields: [users.group_id],
+    fields: [user.group_id],
     references: [groups.id],
   }),
-  authenticators: many(authenticators),
-  accounts: many(accounts),
+  users_to_groups: many(users_to_groups),
+  posts: many(posts),
+  authenticators: many(authenticator),
+  accounts: many(account),
 }));
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+  user: one(user, {
+    fields: [profiles.user_id],
+    references: [user.id],
+  }),
+}));
+
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
+  }),
+}));
+
+export const groupsRelations = relations(groups, ({ many }) => ({
+  users: many(user),
+  users_to_groups: many(users_to_groups),
+}));
+
+export const users_to_groupsRelations = relations(
+  users_to_groups,
+  ({ one }) => ({
+    group: one(groups, {
+      fields: [users_to_groups.group_id],
+      references: [groups.id],
+    }),
+    user: one(user, {
+      fields: [users_to_groups.user_id],
+      references: [user.id],
+    }),
+  })
+);
 
 export const citiesRelations = relations(cities, ({ one }) => ({
   country: one(countries, {
@@ -44,49 +79,23 @@ export const countriesRelations = relations(countries, ({ many }) => ({
   cities: many(cities),
 }));
 
-export const profilesRelations = relations(profiles, ({ one }) => ({
-  user: one(users, {
-    fields: [profiles.user_id],
-    references: [users.id],
+export const postsRelations = relations(posts, ({ one }) => ({
+  user: one(user, {
+    fields: [posts.author_id],
+    references: [user.id],
   }),
 }));
 
-export const sessionRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
+export const authenticatorRelations = relations(authenticator, ({ one }) => ({
+  user: one(user, {
+    fields: [authenticator.userId],
+    references: [user.id],
   }),
 }));
 
-export const users_to_groupsRelations = relations(
-  users_to_groups,
-  ({ one }) => ({
-    user: one(users, {
-      fields: [users_to_groups.user_id],
-      references: [users.id],
-    }),
-    group: one(groups, {
-      fields: [users_to_groups.group_id],
-      references: [groups.id],
-    }),
-  })
-);
-
-export const groupsRelations = relations(groups, ({ many }) => ({
-  users_to_groups: many(users_to_groups),
-  users: many(users),
-}));
-
-export const authenticatorRelations = relations(authenticators, ({ one }) => ({
-  user: one(users, {
-    fields: [authenticators.userId],
-    references: [users.id],
-  }),
-}));
-
-export const accountRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
   }),
 }));

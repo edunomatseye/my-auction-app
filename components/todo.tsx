@@ -21,7 +21,7 @@ export function Todo() {
 
   type Todo =
     | {
-        id: string;
+        id: number;
         title: string | null;
         description: string | null;
         dueDate: string | null;
@@ -131,11 +131,11 @@ export function Todo() {
     });
   };
 
-  const handleTodoRemove = async (id: string) => {
+  const handleTodoRemove = async (id: number) => {
     removeTodoMutate({ id });
   };
 
-  const handleToggleComplete = (id: string) => {
+  const handleToggleComplete = (id: number) => {
     toggleCompleteMutate({ id });
   };
 
@@ -148,7 +148,7 @@ export function Todo() {
         <h2 className="text-2xl font-bold mb-4">Todo List</h2>
         {todos?.map((todo) => (
           <div
-            key={todo.title}
+            key={todo.id}
             className={`bg-card p-4 rounded-lg mb-4 border transition-colors ${
               todo.completed
                 ? "border-primary text-muted-foreground"

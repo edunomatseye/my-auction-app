@@ -1,6 +1,6 @@
-# Next.js & NextUI Template
+# My Auction Pro
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+This is a app template for creating applications using Next.js 14 (app directory) and NextUI (v2).
 
 [Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
 
@@ -13,6 +13,9 @@ This is a template for creating applications using Next.js 14 (app directory) an
 - [TypeScript](https://www.typescriptlang.org/)
 - [Framer Motion](https://www.framer.com/motion/)
 - [next-themes](https://github.com/pacocoursey/next-themes)
+- [drizzle](https://github.com/pacocoursey/next-themes)
+- [Supabase](https://github.com/pacocoursey/next-themes)
+- [Next Auth](https://github.com/pacocoursey/next-themes)
 
 ## How to Use
 
