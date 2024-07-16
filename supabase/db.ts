@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-import { Database } from "./database.types";
+//import { Database } from "./database.types";
 
 const options = {
   db: {
@@ -16,8 +16,8 @@ const options = {
   },
 } as const;
 
-export default createClient<Database>(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_PUBLIC_ANON!,
+export const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   options
 );
