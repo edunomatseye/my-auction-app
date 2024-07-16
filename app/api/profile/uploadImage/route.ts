@@ -27,8 +27,6 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (e) {
-    console.error("Error uploading Image: " + e);
-
     return NextResponse.json({ message: "Error uploading image." });
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useForm, SubmitHandler, SubmitErrorHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -49,43 +49,33 @@ export default function LoginForm() {
   });
 
   const createLogin = async (data: LoginForm) => {
-    const response = await fetch("/api/login", {
+    await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
-    const dat = await response.json();
-
-    console.log(dat);
   };
 
   const loginMutator = useMutation({
     mutationKey: ["loginForm"],
     mutationFn: createLogin,
     onSuccess: () => {
-      console.log("success");
       reset(emptyValues);
     },
   });
 
   const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    console.log(data);
     toast.success("Login successfull");
     loginMutator.mutate(data);
     //reset(emptyValues);
   };
 
-  const onError: SubmitErrorHandler<LoginForm> = (errors) => {
-    console.log(errors);
-  };
-
   return (
     <div>
       <div>loginForm</div>
-      <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Project Login</CardTitle>

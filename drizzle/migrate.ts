@@ -1,11 +1,14 @@
 import "dotenv/config";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 
-import { db } from "./db";
+import { migrationClient } from "./db";
 
 // This will run migrations on the database, skipping the ones already applied
 (async function () {
-  await migrate(db, { migrationsFolder: "./drizzle/schema" });
+  await migrate(drizzle(migrationClient), {
+    migrationsFolder: "./drizzle/schema",
+  });
 })();
 
 // Don't forget to close the connection, otherwise the script will hang
