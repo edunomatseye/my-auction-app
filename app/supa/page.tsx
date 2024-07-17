@@ -7,7 +7,11 @@ export default async function SupaPage() {
 
   return (
     <div>
-      <ul>{todos?.map((todo) => <li key={todo.id}>{todo.description}</li>)}</ul>
+      <ul>
+        {todos?.map((todo) => {
+          return <li key={todo.id}>{todo.description}</li>;
+        })}
+      </ul>
       <span>pls work!</span>
     </div>
   );

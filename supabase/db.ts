@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 // const session = await auth();
 // const supabaseAccessToken = session?.supabaseAccessToken;
 
-//import { Database } from "./database.types";
+import { Database } from "./database.types";
 
 const options = {
   db: {
@@ -21,7 +21,7 @@ const options = {
   //   },
 } as const;
 
-export const supabase = createClient(
+export const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
   options

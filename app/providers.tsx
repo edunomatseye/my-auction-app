@@ -14,7 +14,7 @@ import { SessionProvider } from "next-auth/react";
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
-  session?: Session;
+  session?: Session | null;
 }
 
 const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
