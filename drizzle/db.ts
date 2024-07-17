@@ -3,10 +3,10 @@ import "dotenv/config";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import * as schema from "@/drizzle/schema/schema";
 import * as relations from "@/drizzle/schema/relations";
+import * as schema from "@/drizzle/schema/schema";
 
-const connectionString = process.env.SUPABASE_DIRECT_URL!;
+const connectionString = process.env.SUPABASE_DIRECT_URL as string;
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 const client = postgres(connectionString, { prepare: false });
