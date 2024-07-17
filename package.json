@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "migrate": "drizzle-kit generate && drizzle-kit migrate",
     "drizzle:studio": "drizzle-kit studio",
+    "supabase:types": "supabase gen types --lang=typescript --project-id=jmbbvgkfuwtgrcsbnvrp > supabase/database.types.ts",
     "test": "vitest"
   },
   "dependencies": {
