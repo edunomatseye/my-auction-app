@@ -11,34 +11,34 @@ import { getUserByCredentials } from "../../../utils/db";
 import { saltAndHashPassword } from "../../../utils/password";
 
 const CredentialsProvider = Credentials({
-	name: "Credentials",
-	credentials: {
-		email: { label: "Email", type: "email", placeholder: "you@example.com" },
-		password: { label: "Password", type: "password" },
-	},
-	authorize: async (credentials) => {
-		try {
-			const { email, password } = await signInSchema.parseAsync(credentials);
-			const pwHash = await saltAndHashPassword(password);
-			const user = await getUserByCredentials(email, pwHash);
+  name: "Credentials",
+  credentials: {
+    email: { label: "Email", type: "email", placeholder: "you@example.com" },
+    password: { label: "Password", type: "password" },
+  },
+  authorize: async (credentials) => {
+    try {
+      const { email, password } = await signInSchema.parseAsync(credentials);
+      const pwHash = await saltAndHashPassword(password);
+      const user = await getUserByCredentials(email, pwHash);
 
-			if (!user) {
-				throw new Error("Invalid email or password");
-			}
+      if (!user) {
+        throw new Error("Invalid email or password");
+      }
 
-			return user;
-		} catch (error) {
-			if (error instanceof ZodError) {
-				return null;
-			}
-			throw error;
-		}
-	},
+      return user;
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return null;
+      }
+      throw error;
+    }
+  },
 });
 
 export default NextAuth({
-	adapter: DrizzleAdapter(db),
-	session: { strategy: "jwt" },
-	secret: process.env.NEXTAUTH_SECRET,
-	providers: [CredentialsProvider],
+  adapter: DrizzleAdapter(db),
+  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
+  providers: [CredentialsProvider],
 } satisfies NextAuthConfig);

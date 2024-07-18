@@ -5,5 +5,5 @@ import Google from "next-auth/providers/google";
 import Twitter from "next-auth/providers/twitter";
 
 export default {
-	providers: [Google, GitHub, Twitter],
+  providers: [Google, GitHub, Twitter],
 } satisfies NextAuthConfig;

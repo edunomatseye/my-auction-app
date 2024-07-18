@@ -12,30 +12,30 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 
 export interface ProvidersProps {
-	children: React.ReactNode;
-	themeProps?: ThemeProviderProps;
-	session?: Session | null;
+  children: React.ReactNode;
+  themeProps?: ThemeProviderProps;
+  session?: Session | null;
 }
 
 const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
-	const [queryClient] = React.useState(() => new QueryClient());
+  const [queryClient] = React.useState(() => new QueryClient());
 
-	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-	);
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
 };
 
 export function Providers({ children, themeProps, session }: ProvidersProps) {
-	const router = useRouter();
+  const router = useRouter();
 
-	return (
-		<SessionProvider session={session}>
-			<ReactQueryProvider>
-				<NextUIProvider navigate={router.push}>
-					<NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-				</NextUIProvider>
-				<ReactQueryDevtools initialIsOpen={false} />
-			</ReactQueryProvider>
-		</SessionProvider>
-	);
+  return (
+    <SessionProvider session={session}>
+      <ReactQueryProvider>
+        <NextUIProvider navigate={router.push}>
+          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+        </NextUIProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ReactQueryProvider>
+    </SessionProvider>
+  );
 }

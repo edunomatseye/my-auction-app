@@ -1,73 +1,53 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "build": {
-      "outputs": [
-        "{projectRoot}/.next"
-      ],
-      "cache": true
-    },
-    "migrate": {
-      "outputs": [
-        "{projectRoot}/drizzle/migrations"
-      ],
-      "cache": true
-    },
-    "supabase:types": {
-      "outputs": [
-        "{projectRoot}/supabase/database.types.ts"
-      ],
-      "cache": true
-    },
-    "lint-old": {
-      "cache": true
-    },
-    "test": {
-      "cache": true
-    },
-    "lint": {
-      "cache": true
-    },
-    "lint:fix": {
-      "cache": true
-    },
-    "lint:staged": {
-      "cache": true
-    }
-  },
-  "defaultBase": "main",
-  "plugins": [
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "eslint:lint"
-      }
-    },
-    {
-      "plugin": "@nx/vite/plugin",
-      "options": {
-        "buildTargetName": "build",
-        "testTargetName": "vite:test",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview",
-        "serveStaticTargetName": "serve-static"
-      }
-    },
-    {
-      "plugin": "@nx/playwright/plugin",
-      "options": {
-        "targetName": "e2e"
-      }
-    },
-    {
-      "plugin": "@nx/next/plugin",
-      "options": {
-        "startTargetName": "next:start",
-        "buildTargetName": "next:build",
-        "devTargetName": "next:dev",
-        "serveStaticTargetName": "serve-static"
-      }
-    }
-  ],
-  "nxCloudAccessToken": "MTUxNGI4YzQtYjgwNi00N2I4LTkwMjEtODA1YTdhZWQ1YjQ4fHJlYWQtd3JpdGU="
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"targetDefaults": {
+		"build": {
+			"outputs": ["{projectRoot}/.next"],
+			"cache": true
+		},
+		"lint": {
+			"cache": true
+		},
+		"test": {
+			"cache": true
+		}
+	},
+	"defaultBase": "main",
+	"plugins": [
+		{
+			"plugin": "@nx/eslint/plugin",
+			"options": {
+				"targetName": "eslint:lint"
+			}
+		},
+		{
+			"plugin": "@nx/vite/plugin",
+			"options": {
+				"buildTargetName": "build",
+				"testTargetName": "vite:test",
+				"serveTargetName": "serve",
+				"previewTargetName": "preview",
+				"serveStaticTargetName": "serve-static"
+			}
+		},
+		{
+			"plugin": "@nx/playwright/plugin",
+			"options": {
+				"targetName": "e2e"
+			}
+		},
+		{
+			"plugin": "@nx/next/plugin",
+			"options": {
+				"startTargetName": "next:start",
+				"buildTargetName": "next:build",
+				"devTargetName": "next:dev",
+				"serveStaticTargetName": "serve-static"
+			}
+		}
+	],
+	"nxCloudAccessToken": "MTUxNGI4YzQtYjgwNi00N2I4LTkwMjEtODA1YTdhZWQ1YjQ4fHJlYWQtd3JpdGU=",
+	"namedInputs": {
+		"sharedGlobals": ["{workspaceRoot}/.github/workflows/nx.yml"]
+	}
 }
