@@ -1,6 +1,10 @@
 export type SiteConfig = typeof siteConfig;
 
+<<<<<<< HEAD
 export const siteConfig = {
+=======
+export const siteCnfig = {
+>>>>>>> dev
   name: "Auction Pro",
   description: "Auction it regardless of your experience.",
   navItems: [
